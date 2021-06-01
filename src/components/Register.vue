@@ -1,49 +1,54 @@
 <template>
     <v-form ref="form" v-model="valid" @submit.prevent="submit()"
-        class="pa-2 pa-sm-8"
+        class="px-4 py-8 d-flex justify-center"
     >
-        <v-card class="pa-4">
-            <v-card-title>Register</v-card-title>
+        <v-responsive max-width="500px">
+            <p class="text-h5">Create account</p>
 
-            <v-card-text>
-                <v-text-field
-                    v-model="email"
-                    :rules="emailRules"
-                    label="E-mail"
-                    type="email"
-                    required
-                ></v-text-field>
+            <v-text-field
+                v-model="email"
+                :rules="emailRules"
+                label="E-mail"
+                type="email"
+                required
+            />
 
-                <v-text-field
-                    v-model="password"
-                    :rules="passwordRules"
-                    label="Password"
-                    :type="showPassword ? 'text' : 'password'"
-                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="showPassword = !showPassword"
-                    required
-                ></v-text-field>
+            <v-text-field
+                v-model="password"
+                :rules="passwordRules"
+                label="Password"
+                :type="showPassword ? 'text' : 'password'"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showPassword = !showPassword"
+                required
+            />
 
-                <v-text-field
-                    v-model="repeatPassword"
-                    :rules="repeatPasswordRules"
-                    label="Repeat password"
-                    :type="showRepeatPassword ? 'text' : 'password'"
-                    :append-icon="showRepeatPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="showRepeatPassword = !showRepeatPassword"
-                    required
-                ></v-text-field>
-            </v-card-text>
+            <v-text-field
+                v-model="repeatPassword"
+                :rules="repeatPasswordRules"
+                label="Repeat password"
+                :type="showRepeatPassword ? 'text' : 'password'"
+                :append-icon="showRepeatPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="showRepeatPassword = !showRepeatPassword"
+                required
+            />
 
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn :disabled="!valid" color="success" @click="submit"
-                    :loading="getLoading()"
-                >
-                    Register
-                </v-btn>
-            </v-card-actions>
-        </v-card>
+            <v-btn @click="submit"
+                :loading="getLoading()"
+                class="mt-4 mb-4" block large
+                color="primary"
+                :disabled="!valid"
+            >
+                Sign up
+            </v-btn>
+
+            <p class="text-caption text-center pointer"
+                @click="$router.push('/login')"
+                link
+            >
+                Back to login
+            </p>
+        </v-responsive>
     </v-form>
 </template>
 
@@ -95,5 +100,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.pointer:hover {
+    cursor: pointer;
+    color: #000;
+}
 </style>

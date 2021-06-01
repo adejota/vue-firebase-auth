@@ -85,11 +85,13 @@ const actions = {
             .signOut()
             .then(() => {
                 commit("setUser", null)
+                commit("setLoading", false)
                 router.push({ path: '/' })
             })
             .catch(error => {
                 commit("setError", error.message)
                 Vue.$toast.error(error.message)
+                commit("setLoading", false)
             })
     }
 }

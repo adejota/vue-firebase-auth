@@ -1,15 +1,11 @@
 <template>
-    <v-main class="pa-2 pa-sm-8">
-        <v-card class="pa-4">
-            <v-card-title>User information</v-card-title>
+    <v-main class="px-4 py-8">
+        <p class="text-h5">User information</p>
 
-            <v-card-text>
-                <div class="d-flex flex-column mb-4" v-for="(item, name) in user" :key="name">
-                    <strong><span>{{ name }}</span></strong>
-                    <span >{{ item ? item : 'null' }}</span>
-                </div>
-            </v-card-text>
-        </v-card>
+        <div class="d-flex flex-column mb-4" v-for="(item, name) in user" :key="name">
+            <strong><span>{{ name }}</span></strong>
+            <span >{{ item ? item : 'null' }}</span>
+        </div>
     </v-main>
 </template>
 

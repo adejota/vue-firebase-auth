@@ -1,39 +1,49 @@
 <template>
     <v-form ref="form" v-model="valid" @submit.prevent="submit()"
-        class="pa-2 pa-sm-8"
+        class="px-4 py-8 d-flex justify-center"
     >
-        <v-card class="pa-4">
-            <v-card-title>Login</v-card-title>
+        <v-responsive max-width="500px">
+            <p class="text-h5">Login</p>
 
-            <v-card-text>
-                <v-text-field
-                    v-model="email"
-                    :rules="emailRules"
-                    label="E-mail"
-                    type="email"
-                    required
-                ></v-text-field>
+            <v-text-field
+                v-model="email"
+                :rules="emailRules"
+                label="E-mail"
+                type="email"
+                required
+            />
 
-                <v-text-field
-                    v-model="password"
-                    :rules="passwordRules"
-                    label="Password"
-                    :type="show ? 'text' : 'password'"
-                    :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                    @click:append="show = !show"
-                    required
-                ></v-text-field>
-            </v-card-text>
+            <v-text-field
+                v-model="password"
+                :rules="passwordRules"
+                label="Password"
+                :type="show ? 'text' : 'password'"
+                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="show = !show"
+                required
+            />
 
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn :disabled="!valid" color="success" @click="submit"
-                    :loading="getLoading()"
-                >
-                    Login
-                </v-btn>
-            </v-card-actions>
-        </v-card>
+            <v-btn link to="/register"
+                class="mt-4" block large outlined
+                color="primary"
+            >
+                Create account
+            </v-btn>
+
+            <v-btn :disabled="!valid" @click="submit"
+                :loading="getLoading()"
+                class="mt-4 mb-4" block large
+                color="primary"
+            >
+                Sign in
+            </v-btn>
+
+            <p class="text-caption text-center pointer"
+                
+            >
+                Forgot password?
+            </p>
+        </v-responsive>
     </v-form>
 </template>
 
@@ -70,5 +80,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.pointer:hover {
+    cursor: pointer;
+    color: #000;
+}
 </style>
