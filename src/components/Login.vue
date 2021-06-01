@@ -38,17 +38,18 @@
                 Create account
             </v-btn>
 
-            <p class="text-caption text-center pointer"
-                
-            >
-                Forgot password?
-            </p>
+            <div class="d-flex justify-center align-center mb-4">
+                <span class="text-caption text-center pointer">
+                    Forgot password?
+                </span>
+            </div>
 
             <v-divider></v-divider>
 
-            <v-btn @click="loginWithGoogle"
+            <v-btn @click="googleLogin()"
                 class="mt-4 mb-4" block
                 color="secondary"
+                :loading="getGoogleLoading()"
             >
                 <v-icon dark left>mdi-google</v-icon>
                 Sign in with google
@@ -80,12 +81,17 @@ export default {
 
     methods: {
         ...mapActions(['login', 'loginWithGoogle']),
-        ...mapMutations(['setLoading']),
-        ...mapGetters(['getLoading']),
+        ...mapMutations(['setLoading', 'setGoogleLoading']),
+        ...mapGetters(['getLoading', 'getGoogleLoading']),
 
         submit() {
-            this.setLoading(true),
+            this.setLoading(true)
             this.login({ email: this.email, password: this.password })
+        },
+
+        googleLogin() {
+            this.setGoogleLoading(true)
+            this.loginWithGoogle()
         },
     },
 }
@@ -94,6 +100,8 @@ export default {
 <style scoped>
 .pointer:hover {
     cursor: pointer;
-    color: #000;
+    color: black;
+    font-weight: bold;
+    transition: all .3s ease;
 }
 </style>

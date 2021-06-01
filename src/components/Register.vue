@@ -42,18 +42,20 @@
                 Sign up
             </v-btn>
 
-            <p class="text-caption text-center pointer"
-                @click="$router.push('/login')"
-                link
-            >
-                Back to login
-            </p>
+            <div class="d-flex justify-center align-center mb-4">
+                <span class="text-caption text-center pointer" link
+                    @click="$router.push('/login')"
+                >
+                    Back to login
+                </span>
+            </div>
 
             <v-divider></v-divider>
 
-            <v-btn @click="loginWithGoogle"
+            <v-btn @click="googleRegister()"
                 class="mt-4 mb-4" block
                 color="secondary"
+                :loading="getGoogleLoading()"
             >
                 <v-icon dark left>mdi-google</v-icon>
                 Sign up with google
@@ -99,12 +101,17 @@ export default {
 
     methods: {
         ...mapActions(['register', 'loginWithGoogle']),
-        ...mapMutations(["setLoading"]),
-        ...mapGetters(['getLoading']),
+        ...mapMutations(["setLoading", 'setGoogleLoading']),
+        ...mapGetters(['getLoading', 'getGoogleLoading']),
 
         submit() {
             this.setLoading(true)
             this.register({ email: this.email, password: this.password })
+        },
+
+        googleRegister() {
+            this.setGoogleLoading(true)
+            this.loginWithGoogle()
         },
     },
 }
@@ -113,6 +120,8 @@ export default {
 <style scoped>
 .pointer:hover {
     cursor: pointer;
-    color: #000;
+    color: black;
+    font-weight: bold;
+    transition: all .3s ease;
 }
 </style>

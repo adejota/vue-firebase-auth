@@ -12,6 +12,7 @@ const initialState = () => {
         token: null,
         error: null,
         loading: null,
+        googleLoading: null,
     }
 }
 
@@ -31,6 +32,10 @@ const getters = {
     getLoading(state) {
         return state.loading
     },
+
+    getGoogleLoading(state) {
+        return state.googleLoading
+    },
 }
 
 const mutations = {
@@ -48,6 +53,10 @@ const mutations = {
 
     setLoading(state, payload) {
         state.loading = payload;
+    },
+
+    setGoogleLoading(state, payload) {
+        state.googleLoading = payload;
     }
 }
 
@@ -58,8 +67,8 @@ const actions = {
             .createUserWithEmailAndPassword(payload.email, payload.password)
             .then(response => {
                 commit("setUser", response.user)
-                commit("setLoading", false)
                 router.push({ path: '/home' })
+                commit("setLoading", false)
             })
             .catch(error => {
                 commit("setError", error.message)
@@ -74,8 +83,8 @@ const actions = {
             .signInWithEmailAndPassword(payload.email, payload.password)
             .then(response => {
                 commit("setUser", response.user)
-                commit("setLoading", false)
                 router.push({ path: '/home' })
+                commit("setLoading", false)
             })
             .catch(error => {
                 commit("setError", error.message)
@@ -93,13 +102,13 @@ const actions = {
             .then((response) => {
                 commit("setUser", response.user)
                 commit("setToken", response.credential.accessToken)
-                commit("setLoading", false)
                 router.push({ path: '/home' })
+                commit("setGoogleLoading", false)
             })
             .catch(error => {
                 commit("setError", error.message)
                 Vue.$toast.error(error.message)
-                commit("setLoading", false)
+                commit("setGoogleLoading", false)
             })
     },
 
@@ -109,8 +118,8 @@ const actions = {
             .signOut()
             .then(() => {
                 commit("setUser", null)
-                commit("setLoading", false)
                 router.push({ path: '/login' })
+                commit("setLoading", false)
             })
             .catch(error => {
                 commit("setError", error.message)
