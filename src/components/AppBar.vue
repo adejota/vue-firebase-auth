@@ -12,8 +12,8 @@
             @click="setLoading(true), logout()"
             dark text
         >
-            <v-icon left dark>mdi-logout</v-icon>
             Logout
+            <v-icon right dark>mdi-logout</v-icon>
         </v-btn>
     </v-app-bar>
 </template>

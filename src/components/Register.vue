@@ -35,7 +35,7 @@
 
             <v-btn @click="submit"
                 :loading="getLoading()"
-                class="mt-4 mb-4" block large
+                class="mt-4 mb-4" block
                 color="primary"
                 :disabled="!valid"
             >
@@ -48,6 +48,16 @@
             >
                 Back to login
             </p>
+
+            <v-divider></v-divider>
+
+            <v-btn @click="loginWithGoogle"
+                class="mt-4 mb-4" block
+                color="secondary"
+            >
+                <v-icon dark left>mdi-google</v-icon>
+                Sign up with google
+            </v-btn>
         </v-responsive>
     </v-form>
 </template>
@@ -88,7 +98,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(["register"]),
+        ...mapActions(['register', 'loginWithGoogle']),
         ...mapMutations(["setLoading"]),
         ...mapGetters(['getLoading']),
 

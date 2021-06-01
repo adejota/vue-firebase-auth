@@ -23,19 +23,19 @@
                 required
             />
 
-            <v-btn link to="/register"
-                class="mt-4" block large outlined
-                color="primary"
-            >
-                Create account
-            </v-btn>
-
             <v-btn :disabled="!valid" @click="submit"
                 :loading="getLoading()"
-                class="mt-4 mb-4" block large
+                class="mt-4" block
                 color="primary"
             >
                 Sign in
+            </v-btn>
+
+            <v-btn link to="/register"
+                class="mt-4 mb-4" block outlined
+                color="primary"
+            >
+                Create account
             </v-btn>
 
             <p class="text-caption text-center pointer"
@@ -43,6 +43,17 @@
             >
                 Forgot password?
             </p>
+
+            <v-divider></v-divider>
+
+            <v-btn @click="loginWithGoogle"
+                class="mt-4 mb-4" block
+                color="secondary"
+            >
+                <v-icon dark left>mdi-google</v-icon>
+                Sign in with google
+            </v-btn>
+
         </v-responsive>
     </v-form>
 </template>
@@ -68,8 +79,8 @@ export default {
     }),
 
     methods: {
-        ...mapActions(["login"]),
-        ...mapMutations(["setLoading"]),
+        ...mapActions(['login', 'loginWithGoogle']),
+        ...mapMutations(['setLoading']),
         ...mapGetters(['getLoading']),
 
         submit() {

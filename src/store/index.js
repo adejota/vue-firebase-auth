@@ -9,6 +9,7 @@ Vue.use(Vuex)
 const initialState = () => {
     return { 
         user: null,
+        token: null,
         error: null,
         loading: null,
     }
@@ -35,6 +36,10 @@ const getters = {
 const mutations = {
     setUser(state, payload) {
         state.user = payload;
+    },
+
+    setToken(state, payload) {
+        state.token = payload;
     },
 
     setError(state, payload) {
@@ -79,6 +84,25 @@ const actions = {
             })
     },
 
+    loginWithGoogle({ commit }) {
+        let provider = new firebase.auth.GoogleAuthProvider()
+
+        firebase
+            .auth()
+            .signInWithPopup(provider)
+            .then((response) => {
+                commit("setUser", response.user)
+                commit("setToken", response.credential.accessToken)
+                commit("setLoading", false)
+                router.push({ path: '/home' })
+            })
+            .catch(error => {
+                commit("setError", error.message)
+                Vue.$toast.error(error.message)
+                commit("setLoading", false)
+            })
+    },
+
     logout({ commit }) {
         firebase
             .auth()
@@ -86,7 +110,7 @@ const actions = {
             .then(() => {
                 commit("setUser", null)
                 commit("setLoading", false)
-                router.push({ path: '/' })
+                router.push({ path: '/login' })
             })
             .catch(error => {
                 commit("setError", error.message)
