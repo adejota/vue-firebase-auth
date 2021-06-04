@@ -7,12 +7,13 @@ import router from '@/router'
 Vue.use(Vuex)
 
 const initialState = () => {
-    return { 
+    return {
+        uid: null,
         user: null,
-        token: null,
         error: null,
         loading: null,
         googleLoading: null,
+        updating: null,
     }
 }
 
@@ -36,39 +37,45 @@ const getters = {
     getGoogleLoading(state) {
         return state.googleLoading
     },
+
+    getUpdating(state) {
+        return state.updating
+    }
 }
 
 const mutations = {
-    setUser(state, payload) {
-        state.user = payload;
+    setUid(state, payload) {
+        state.uid = payload
     },
 
-    setToken(state, payload) {
-        state.token = payload;
+    setUser(state, payload) {
+        state.user = payload
     },
 
     setError(state, payload) {
-        state.error = payload;
+        state.error = payload
     },
 
     setLoading(state, payload) {
-        state.loading = payload;
+        state.loading = payload
     },
 
     setGoogleLoading(state, payload) {
-        state.googleLoading = payload;
+        state.googleLoading = payload
+    },
+
+    setUpdating(state, payload) {
+        state.updating = payload
     }
 }
 
 const actions = {
-    register({ commit }, payload) {
+    register({ commit, dispatch }, payload) {
         firebase
             .auth()
             .createUserWithEmailAndPassword(payload.email, payload.password)
             .then(response => {
-                commit("setUser", response.user)
-                router.push({ path: '/home' })
-                commit("setLoading", false)
+                dispatch('createUser', response.user)
             })
             .catch(error => {
                 commit("setError", error.message)
@@ -77,14 +84,12 @@ const actions = {
             })
     },
 
-    login({ commit }, payload) {
+    login({ commit, dispatch }, payload) {
         firebase
             .auth()
             .signInWithEmailAndPassword(payload.email, payload.password)
             .then(response => {
-                commit("setUser", response.user)
-                router.push({ path: '/home' })
-                commit("setLoading", false)
+                dispatch('loadUser', response.user)
             })
             .catch(error => {
                 commit("setError", error.message)
@@ -101,7 +106,6 @@ const actions = {
             .signInWithPopup(provider)
             .then((response) => {
                 commit("setUser", response.user)
-                commit("setToken", response.credential.accessToken)
                 router.push({ path: '/home' })
                 commit("setGoogleLoading", false)
             })
@@ -126,6 +130,53 @@ const actions = {
                 Vue.$toast.error(error.message)
                 commit("setLoading", false)
             })
+    },
+
+    async createUser({ commit }, user) {
+        let payload = 
+        {
+            email: user.email,
+        }
+
+        try {
+            const res = await Vue.prototype.$http.put(`data/users/${user.uid}.json`, payload)
+            if (res) {
+                commit("setUser", payload)
+                commit("setUid", user.uid)
+                router.push({ path: '/home' })
+                commit("setLoading", false)
+            }
+        } catch (error) {
+            commit("setError", error.message)
+        }
+    },
+
+    async loadUser({ commit }, user) {
+        try {
+            const res = await Vue.prototype.$http.get(`data/users/${user.uid}.json`)
+            if (res) {
+                commit("setUser", res.data)
+                commit("setUid", user.uid)
+                router.push({ path: '/home' })
+                commit("setLoading", false)
+            }
+        } catch (error) {
+            commit("setError", error.message)
+        }
+    },
+
+    async updateUser({ commit, state }, payload) {
+        try {
+            const res = await Vue.prototype.$http.put(`data/users/${state.uid}.json`, payload)
+            if (res) {
+                Vue.$toast.success('User updated successfully')
+                commit("setUpdating", false)
+            }
+        }
+        catch (error) {
+            commit("setError", error.message)
+            commit("setUpdating", false)
+        }
     }
 }
 

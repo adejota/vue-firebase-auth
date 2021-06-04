@@ -4,58 +4,75 @@
             <v-responsive max-width="500px">
                 <div class="d-flex flex-column align-center mb-4">
                     <v-avatar size="100" color="primary">
-                        <v-img v-if="this.getUser.photoURL" 
-                            :src="this.getUser.photoURL"
+                        <v-img v-if="getUser.photo" 
+                            :src="getUser.photo"
                         />
-                        <span v-else class="white--text text-h4 text-uppercase">{{ userInitials(this.getUser.email) }}</span>
+                        <span v-else class="white--text text-h4 text-uppercase">{{ userInitials(getUser.email) }}</span>
                     </v-avatar>
                 </div>
 
-                <div class="d-flex flex-column align-start mb-4">
-                    <strong><span>Name:</span></strong>
-                    <span>{{ this.getUser.displayName ? this.getUser.displayName : 'Uninformed' }}</span>
-                </div>
+                <v-text-field
+                    v-model="getUser.name"
+                    label="Name"
+                    type="text"
+                />
 
-                <div class="d-flex flex-column mb-4">
-                    <strong><span>E-mail:</span></strong>
-                    <span>{{ this.getUser.email }}</span>
-                </div>
+                <v-text-field
+                    v-model="getUser.email"
+                    label="E-mail"
+                    type="email"
+                />
 
-                <div class="d-flex flex-column mb-4">
-                    <strong><span>Phone number:</span></strong>
-                    <span>{{ this.getUser.phoneNumber ? this.getUser.phoneNumber : 'Uninformed' }}</span>
-                </div>
+                <v-text-field
+                    v-model="getUser.phone"
+                    label="Phone"
+                    type="text"
+                />
+
+                <v-text-field
+                    v-model="getUser.addressCode"
+                    label="Address code"
+                    type="text"
+                />
+
+                <v-btn @click="save()"
+                    class="mt-4" block
+                    color="primary"
+                    :loading="getUpdating"
+                >
+                    Save
+                </v-btn>
             </v-responsive>
         </div>
     </v-main>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
     name: 'Home',
 
-    data() {
-        return {
-            user: null,
-        }
-    },
-
     computed: {
-        ...mapGetters(['getUser', 'isUserAuth'])
+        ...mapGetters(['getUser', 'getUpdating'])
     },
 
     methods: {
+        ...mapActions(['updateUser']),
+        ...mapMutations(['setUpdating']),
+
         userInitials(email) {
             let _email = email.split('')
             return _email[0] + _email[1]
-        }
-    },
+        },
 
-    mounted() {
-        this.user = this.getUser.providerData[0]
-    }
+        save() {
+            this.setUpdating(true)
+            this.updateUser(this.getUser)
+        }
+
+
+    },
 }
 </script>
 
