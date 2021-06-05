@@ -1,9 +1,9 @@
 <template>
-    <v-form ref="form" v-model="valid" @submit.prevent="submit()"
-        class="px-4 py-8 d-flex justify-center"
+    <v-form id="register" ref="form" v-model="valid" @submit.prevent="submit()"
+        class="primary px-4 py-8 d-flex justify-center"
     >
         <v-responsive max-width="500px">
-            <p class="text-h5">Create account</p>
+            <p class="text-h5 textColor--text">Create account</p>
 
             <v-text-field
                 v-model="email"
@@ -11,6 +11,7 @@
                 label="E-mail"
                 type="email"
                 required
+                color="textColor"
             />
 
             <v-text-field
@@ -21,6 +22,7 @@
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="showPassword = !showPassword"
                 required
+                color="textColor"
             />
 
             <v-text-field
@@ -31,12 +33,13 @@
                 :append-icon="showRepeatPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="showRepeatPassword = !showRepeatPassword"
                 required
+                color="textColor"
             />
 
             <v-btn @click="submit"
                 :loading="getLoading()"
                 class="mt-4 mb-4" block
-                color="primary"
+                color="textColor primary--text"
                 :disabled="!valid"
             >
                 Sign up
@@ -85,6 +88,19 @@ export default {
         repeatPassword: '',
     }),
 
+    mounted() {
+        let email = this.$route.params.email
+        let password = this.$route.params.password
+        
+        if (email) {
+            this.email = email
+        }
+
+        if (password) {
+            this.password = password
+        }
+    },
+
     computed: {
         repeatPasswordRules() {
             if (this.repeatPassword.length > 0) {
@@ -100,7 +116,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(['register', 'loginWithGoogle']),
+        ...mapActions(['register', 'registerWithGoogle']),
         ...mapMutations(["setLoading", 'setGoogleLoading']),
         ...mapGetters(['getLoading', 'getGoogleLoading']),
 
@@ -111,13 +127,17 @@ export default {
 
         googleRegister() {
             this.setGoogleLoading(true)
-            this.loginWithGoogle()
+            this.registerWithGoogle()
         },
     },
 }
 </script>
 
 <style scoped>
+#register {
+    height: 90vh;
+}
+
 .pointer:hover {
     cursor: pointer;
     color: black;

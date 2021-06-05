@@ -1,19 +1,20 @@
 <template>
     <v-app-bar
       app
-      dark
+      class="textColor"
     >
-        <span class="text-h5">🔥</span>
+        <span class="text-h5 text--text">🔥</span>
 
         <v-spacer></v-spacer>
 
         <v-btn v-if="isUserAuth"
             :loading="getLoading()"
             @click="setLoading(true), logout()"
-            dark text
+            text
+            class="primary--text"
         >
             Logout
-            <v-icon right dark>mdi-logout</v-icon>
+            <v-icon right>mdi-logout</v-icon>
         </v-btn>
     </v-app-bar>
 </template>

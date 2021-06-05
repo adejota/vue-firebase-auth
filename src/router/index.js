@@ -13,11 +13,17 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: Login,
+        meta: {
+            ifLoggedRedirectHome: true,
+        }
     },
     {
         path: '/register',
         name: 'Register',
-        component: Register
+        component: Register,
+        meta: {
+            ifLoggedRedirectHome: true,
+        }
     },
     {
         path: '/home',
@@ -45,6 +51,13 @@ router.beforeEach((to, from, next) => {
             router.push('login')
         }
     }
+
+    if (to.meta.ifLoggedRedirectHome) {
+        if (store.getters.isUserAuth) {
+            router.push('home')
+        }
+    }
+
     next()
 })
 

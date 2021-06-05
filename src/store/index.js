@@ -53,6 +53,7 @@ const mutations = {
     },
 
     setError(state, payload) {
+        Vue.$toast.error(payload)
         state.error = payload
     },
 
@@ -66,6 +67,10 @@ const mutations = {
 
     setUpdating(state, payload) {
         state.updating = payload
+    },
+
+    clearState(state, payload) {
+        state = payload
     }
 }
 
@@ -79,8 +84,22 @@ const actions = {
             })
             .catch(error => {
                 commit("setError", error.message)
-                Vue.$toast.error(error.message)
                 commit("setLoading", false)
+            })
+    },
+
+    registerWithGoogle({ commit, dispatch }) {
+        let provider = new firebase.auth.GoogleAuthProvider()
+
+        firebase
+            .auth()
+            .signInWithPopup(provider)
+            .then((response) => {
+                dispatch('createUser', response.user)
+            })
+            .catch(error => {
+                commit("setError", error.message)
+                commit("setGoogleLoading", false)
             })
     },
 
@@ -93,25 +112,21 @@ const actions = {
             })
             .catch(error => {
                 commit("setError", error.message)
-                Vue.$toast.error(error.message)
                 commit("setLoading", false)
             })
     },
-
-    loginWithGoogle({ commit }) {
+    
+    loginWithGoogle({ commit, dispatch }) {
         let provider = new firebase.auth.GoogleAuthProvider()
 
         firebase
             .auth()
             .signInWithPopup(provider)
             .then((response) => {
-                commit("setUser", response.user)
-                router.push({ path: '/home' })
-                commit("setGoogleLoading", false)
+                dispatch('loadUser', response.user)
             })
             .catch(error => {
                 commit("setError", error.message)
-                Vue.$toast.error(error.message)
                 commit("setGoogleLoading", false)
             })
     },
@@ -121,13 +136,13 @@ const actions = {
             .auth()
             .signOut()
             .then(() => {
-                commit("setUser", null)
+                commit('setUser', null)
+                commit('clearState', null)
                 router.push({ path: '/login' })
                 commit("setLoading", false)
             })
             .catch(error => {
                 commit("setError", error.message)
-                Vue.$toast.error(error.message)
                 commit("setLoading", false)
             })
     },
@@ -136,6 +151,7 @@ const actions = {
         let payload = 
         {
             email: user.email,
+            photo: user.photoURL
         }
 
         try {
@@ -145,6 +161,7 @@ const actions = {
                 commit("setUid", user.uid)
                 router.push({ path: '/home' })
                 commit("setLoading", false)
+                commit("setGoogleLoading", false)
             }
         } catch (error) {
             commit("setError", error.message)
@@ -154,11 +171,17 @@ const actions = {
     async loadUser({ commit }, user) {
         try {
             const res = await Vue.prototype.$http.get(`data/users/${user.uid}.json`)
-            if (res) {
+            if (res.data) {
                 commit("setUser", res.data)
                 commit("setUid", user.uid)
                 router.push({ path: '/home' })
                 commit("setLoading", false)
+                commit("setGoogleLoading", false)
+            } else {
+                commit('setUser', null)
+                commit('clearState', null)
+                commit("setError", 'There is no user record correspoding to this identifier. The user may have been deleted')
+                commit("setGoogleLoading", false)
             }
         } catch (error) {
             commit("setError", error.message)
@@ -172,6 +195,8 @@ const actions = {
                 Vue.$toast.success('User updated successfully')
                 commit("setUpdating", false)
             }
+
+            return true
         }
         catch (error) {
             commit("setError", error.message)

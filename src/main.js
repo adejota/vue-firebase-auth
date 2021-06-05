@@ -7,6 +7,9 @@ import store from './store'
 import "@/plugins/firebase"
 import "@/plugins/vue-toastifications"
 
+import _ from 'lodash'
+Object.defineProperty(Vue.prototype, '$_', { value: _ });
+
 Vue.config.productionTip = false
 
 new Vue({

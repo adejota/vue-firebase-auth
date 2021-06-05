@@ -1,9 +1,9 @@
 <template>
-    <v-form ref="form" v-model="valid" @submit.prevent="submit()"
-        class="px-4 py-8 d-flex justify-center"
+    <v-form id="login" ref="form" v-model="valid" @submit.prevent="submit()"
+        class="primary px-4 py-8 d-flex justify-center"
     >
         <v-responsive max-width="500px">
-            <p class="text-h5">Login</p>
+            <p class="text-h5 textColor--text">Login</p>
 
             <v-text-field
                 v-model="email"
@@ -11,6 +11,7 @@
                 label="E-mail"
                 type="email"
                 required
+                color="textColor"
             />
 
             <v-text-field
@@ -21,25 +22,27 @@
                 :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="show = !show"
                 required
+                color="textColor"
             />
 
             <v-btn :disabled="!valid" @click="submit"
                 :loading="getLoading()"
                 class="mt-4" block
-                color="primary"
+                color="textColor primary--text"
             >
                 Sign in
             </v-btn>
 
-            <v-btn link to="/register"
+            <v-btn link
                 class="mt-4 mb-4" block outlined
-                color="primary"
+                color="textColor"
+                @click="$router.push({ path: '/register', name: 'Register', params: { email, password } })"
             >
                 Create account
             </v-btn>
 
             <div class="d-flex justify-center align-center mb-4">
-                <span class="text-caption text-center pointer">
+                <span class="text-caption text-center pointer textColor--text">
                     Forgot password?
                 </span>
             </div>
@@ -48,10 +51,10 @@
 
             <v-btn @click="googleLogin()"
                 class="mt-4 mb-4" block
-                color="secondary"
+                color="secondary primary--text"
                 :loading="getGoogleLoading()"
             >
-                <v-icon dark left>mdi-google</v-icon>
+                <v-icon left color="primary">mdi-google</v-icon>
                 Sign in with google
             </v-btn>
 
@@ -98,6 +101,10 @@ export default {
 </script>
 
 <style scoped>
+#login {
+    height: 90vh;
+}
+
 .pointer:hover {
     cursor: pointer;
     color: black;

@@ -20,6 +20,7 @@ export default {
             'mdi-linkedin',
             'mdi-instagram',
         ],
+
     }),
 }
 </script>
