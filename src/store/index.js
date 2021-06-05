@@ -131,6 +131,22 @@ const actions = {
             })
     },
 
+    forgotPassword({ commit }, payload) {
+        console.log(payload.email)
+
+        firebase
+            .auth()
+            .sendPasswordResetEmail(payload.email)
+            .then(() => {
+                Vue.$toast.success('Password recovery e-mail sent successfully')
+                commit("setLoading", false)
+            })
+            .catch(error => {
+                commit("setError", error.message)
+                commit("setLoading", false)
+            })
+    },
+
     logout({ commit }) {
         firebase
             .auth()

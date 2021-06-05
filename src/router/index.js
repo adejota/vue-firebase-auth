@@ -4,6 +4,7 @@ import store from '@/store'
 
 import Login from '@/components/Login'
 import Register from '@/components/Register'
+import ForgotPassword from '@/components/ForgotPassword'
 import Home from '@/components/Home'
 
 Vue.use(VueRouter)
@@ -21,6 +22,14 @@ const routes = [
         path: '/register',
         name: 'Register',
         component: Register,
+        meta: {
+            ifLoggedRedirectHome: true,
+        }
+    },
+    {
+        path: '/forgot-password',
+        name: 'ForgotPassword',
+        component: ForgotPassword,
         meta: {
             ifLoggedRedirectHome: true,
         }

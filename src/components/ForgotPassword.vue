@@ -3,7 +3,7 @@
         class="primary px-4 py-8 d-flex justify-center"
     >
         <v-responsive max-width="500px">
-            <p class="text-h5 textColor--text">Create account</p>
+            <p class="text-h5 textColor--text">Forgot password</p>
 
             <v-text-field
                 v-model="email"
@@ -14,35 +14,13 @@
                 color="textColor"
             />
 
-            <v-text-field
-                v-model="password"
-                :rules="passwordRules"
-                label="Password"
-                :type="showPassword ? 'text' : 'password'"
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="showPassword = !showPassword"
-                required
-                color="textColor"
-            />
-
-            <v-text-field
-                v-model="repeatPassword"
-                :rules="repeatPasswordRules"
-                label="Repeat password"
-                :type="showRepeatPassword ? 'text' : 'password'"
-                :append-icon="showRepeatPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="showRepeatPassword = !showRepeatPassword"
-                required
-                color="textColor"
-            />
-
             <v-btn @click="submit"
                 :loading="getLoading()"
                 class="mt-4 mb-4" block
                 color="textColor primary--text"
                 :disabled="!valid"
             >
-                Sign up
+                Send new password
             </v-btn>
 
             <div class="d-flex justify-center align-center mb-4">
@@ -52,17 +30,6 @@
                     Back to login
                 </span>
             </div>
-
-            <v-divider></v-divider>
-
-            <v-btn @click="googleRegister()"
-                class="mt-4 mb-4" block
-                color="secondary"
-                :loading="getGoogleLoading()"
-            >
-                <v-icon dark left>mdi-google</v-icon>
-                Sign up with google
-            </v-btn>
         </v-responsive>
     </v-form>
 </template>
@@ -90,14 +57,9 @@ export default {
 
     mounted() {
         let email = this.$route.params.email
-        let password = this.$route.params.password
         
         if (email) {
             this.email = email
-        }
-
-        if (password) {
-            this.password = password
         }
     },
 
@@ -116,18 +78,13 @@ export default {
     },
 
     methods: {
-        ...mapActions(['register', 'registerWithGoogle']),
-        ...mapMutations(["setLoading", 'setGoogleLoading']),
-        ...mapGetters(['getLoading', 'getGoogleLoading']),
+        ...mapActions(['forgotPassword']),
+        ...mapMutations(["setLoading"]),
+        ...mapGetters(['getLoading']),
 
         submit() {
             this.setLoading(true)
-            this.register({ email: this.email, password: this.password })
-        },
-
-        googleRegister() {
-            this.setGoogleLoading(true)
-            this.registerWithGoogle()
+            this.forgotPassword({ email: this.email })
         },
     },
 }

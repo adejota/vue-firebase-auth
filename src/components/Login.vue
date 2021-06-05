@@ -1,5 +1,5 @@
 <template>
-    <v-form id="login" ref="form" v-model="valid" @submit.prevent="submit()"
+    <v-form ref="form" v-model="valid" @submit.prevent="submit()"
         class="primary px-4 py-8 d-flex justify-center"
     >
         <v-responsive max-width="500px">
@@ -42,7 +42,8 @@
             </v-btn>
 
             <div class="d-flex justify-center align-center mb-4">
-                <span class="text-caption text-center pointer textColor--text">
+                <span @click="$router.push({ path: '/forgot-password', name: 'ForgotPassword', params: { email } })"
+                    class="text-caption text-center pointer textColor--text">
                     Forgot password?
                 </span>
             </div>
@@ -101,10 +102,6 @@ export default {
 </script>
 
 <style scoped>
-#login {
-    height: 90vh;
-}
-
 .pointer:hover {
     cursor: pointer;
     color: black;
